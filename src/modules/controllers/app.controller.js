@@ -21,13 +21,13 @@ const getUserIp = (req) => {
 
 
 const getGeoLocation = async (ip) => {
-   const geo = await geoip.lookup('102.89.47.144') // 1000 : remove when deploying
+  // const geo = await geoip.lookup('102.89.47.144') // 1000 : remove when deploying
 
-   console.log('geo', geo)
+  // console.log('geo', geo)
 
-   if (!geo) {
-    throw new AppError(`Unable to get user's data`, 400)
-   }
+  // if (!geo) {
+  //   throw new AppError(`Unable to get user's data`, 400)
+  // }
 
   const { data } = await axios.get(`http://ipwho.is/${ip}`)
 
