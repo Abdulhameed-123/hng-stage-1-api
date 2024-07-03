@@ -1,13 +1,13 @@
-import { Router } from "express";
-import { getHello,  } from "../controllers/app.controller.js";
+import { Router } from 'express'
+import { getHello } from '../controllers/app.controller.js'
 
-const router = Router();
+const router = Router()
 
 export const appRoutes = () => {
-  /**
-   * get user
-   */
-  router.get("/", getHello);
+    /**
+     * get user
+     */
+    router.get('/', getHello)
 
-  return router;
-};
+    return router
+}

@@ -3,27 +3,39 @@ import { catchAsync } from "../../common/utils/errorHandler.js";
 import geoip from 'geoip-lite'
 import axios from 'axios'
 import { ENVIRONMENT } from '../../common/config/environment.js'
-import requestIp from 'request-ip'
 
 const getUserIp = (req) => {
-   const ipAddress = requestIp.getClientIp(req)
+    const remoteAddress = req.ip
+    let ipAddress
 
-  console.log('ipAddress', ipAddress)
+    if (remoteAddress) {
+        if (remoteAddress.includes(':')) {
+            ipAddress = remoteAddress.replace('[', '').replace(']', '')
+        } else {
+            ipAddress = remoteAddress
+        }
+    }
 
-  return ipAddress 
+    return ipAddress ?? ''
 }
 
 
 const getGeoLocation = async (ip) => {
-  const geo = await geoip.lookup('102.89.47.144') // 1000 : remove when deploying
+   const geo = await geoip.lookup('102.89.47.144') // 1000 : remove when deploying
 
-  console.log('geo', geo)
+   console.log('geo', geo)
 
-  if(!geo) {
+   if (!geo) {
+    throw new AppError(`Unable to get user's data`, 400)
+   }
+
+  const { data } = await axios.get(`http://ipwho.is/${ip}`)
+
+  if(!data) {
     throw new AppError('Unable to get user IP', 400)
   }
 
-  const { city, region, country } = geo
+  const { city, region, country } = data
 
   return {
       city,
